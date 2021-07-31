@@ -17,6 +17,7 @@ const config = {
     }],
   },
   options: {
+    responsive: true,
     plugins: {
       title: {
         display: true,
@@ -24,6 +25,14 @@ const config = {
       },
 
     },
+    scales: {
+      y: {
+        min: 0,
+        max: 100,
+      },
+
+
+    }
 
   },
 
@@ -33,10 +42,10 @@ var ctx = document.getElementById('myChart').getContext('2d');
 grafica = new Chart(ctx, config);
 socket.on('mqtt_message1', function (valor) {
 
-  recValue = valor['temp']
+  recValue = valor['nivel']
   recDate = valor['fecha']
   document.getElementById('value1').innerHTML = recValue;
-  // console.log(valor)
+  console.log(valor)
 
   if (config.data.labels.length == 10) {
     config.data.labels.shift();

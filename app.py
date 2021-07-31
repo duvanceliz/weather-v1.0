@@ -5,20 +5,14 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug import debug
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager,login_user,logout_user,login_required,current_user,UserMixin
-import os
 from datetime import datetime
-from flask_mysql_connector import MySQL
 from flask_mqtt import Mqtt 
 from flask_socketio import SocketIO
 import json
-import re
 import pandas as pd
 from flask_mail import Mail
 from flask_mail import Message
 from itsdangerous import TimedJSONWebSignatureSerializer, SignatureExpired
-import random
-
-
 
 
 eventlet.monkey_patch()
@@ -372,13 +366,6 @@ def newpassword():
     print(rformat)
     return redirect(rformat)
     
-
-    
-
-
-
-
-
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
     mqtt.subscribe('duvan/sensores')
@@ -391,7 +378,7 @@ def handle_mqtt_message(client, userdata, message):
     if (message.topic == 'duvan/sensores'):
         my_json1 = message.payload.decode('utf8')
         data1 = json.loads(my_json1)
-        Datos_recibido = sensor1(dato = data1['temp'])
+        Datos_recibido = sensor1(dato = data1['nivel'])
         db.session.add(Datos_recibido)
         db.session.commit()
         print(data1)
@@ -399,20 +386,23 @@ def handle_mqtt_message(client, userdata, message):
     elif(message.topic == 'manuel/sensores'):
         my_json2 = message.payload.decode('utf8')
         data2 = json.loads(my_json2)
-        Datos_recibido = sensor2(dato = data2['temp'])
-        db.session.add(Datos_recibido)
+        Datos_recibido2 = sensor2(dato = data2['presion'])
+        db.session.add(Datos_recibido2)
         db.session.commit()
         print(data2)
-        socketio.emit('mqtt_message2', data2)
+        socketio.emit('mqtt_message4', data2)
     elif(message.topic == 'eudes/sensores'):
         my_json3 = message.payload.decode('utf8')
         data3 = json.loads(my_json3)
         Datos_recibido = sensor3(dato = data3['temp'])
         db.session.add(Datos_recibido)
         db.session.commit()
+        Datos_recibido2 = sensor4(dato = data3['humedad'])
+        db.session.add(Datos_recibido2)
+        db.session.commit()
         print(data3)
+        socketio.emit('mqtt_message2', data3)
         socketio.emit('mqtt_message3', data3)
-        socketio.emit('mqtt_message4', data3)
             
 # @mqtt.on_log()
 # def handle_logging(client, userdata, level, buf):

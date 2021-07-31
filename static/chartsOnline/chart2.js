@@ -17,13 +17,20 @@ const config2 = {
     }],
   },
   options: {
+    responsive: true,
     plugins: {
       title: {
         display: true,
         text: 'Sensor de Temperatura'
       },
-
+    
     },
+    scales: {
+      y: {
+        min: 0,
+        max: 100,
+      },
+    }
   },
 
 };
@@ -32,8 +39,8 @@ grafica2 = new Chart(ctx, config2);
 socket.on('mqtt_message2', function (valor) {
 
   recValue = valor['temp']
-  recDate = valor['fecha']
-  // console.log(valor)
+  recDate = valor['fecha2']
+  console.log(valor)
   document.getElementById('value2').innerHTML = recValue;
 
   if (config2.data.labels.length == 10) {
