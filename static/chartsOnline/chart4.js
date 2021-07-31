@@ -26,7 +26,32 @@ const config4 = {
 
     },
     scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Tiempo(h/m/s)',
+          font: {
+            family: 'Comic Sans MS',
+            size: 13,
+            weight: 'bold',
+            lineHeight: 1,
+          },
+        }
+      },
       y: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Prsion Atm(kPa)',
+          font: {
+            family: 'Comic Sans MS',
+            size: 13,
+            weight: 'bold',
+            lineHeight: 1,
+          },
+
+        },
         min: 0,
         max: 1100,
       },
@@ -41,7 +66,7 @@ socket.on('mqtt_message4', function (valor) {
   recValue = valor['presion']
   recDate = valor['fecha2']
   // console.log(valor)
-  document.getElementById('value4').innerHTML = recValue;
+  document.getElementById('value4').innerHTML = Math.round(recValue);
 
   if (config4.data.labels.length == 10) {
     config4.data.labels.shift();

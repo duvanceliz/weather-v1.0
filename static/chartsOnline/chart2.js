@@ -26,7 +26,33 @@ const config2 = {
     
     },
     scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Tiempo(h/m/s)',
+          font: {
+            family: 'Comic Sans MS',
+            size: 13,
+            weight: 'bold',
+            lineHeight: 1,
+          },
+        }
+
+      },
       y: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Temperatura(°C)',
+          font: {
+            family: 'Comic Sans MS',
+            size: 13,
+            weight: 'bold',
+            lineHeight: 1,
+          },
+
+        },
         min: 0,
         max: 100,
       },
@@ -39,9 +65,9 @@ grafica2 = new Chart(ctx, config2);
 socket.on('mqtt_message2', function (valor) {
 
   recValue = valor['temp']
-  recDate = valor['fecha2']
+  recDate = valor['fecha3']
   console.log(valor)
-  document.getElementById('value2').innerHTML = recValue;
+  document.getElementById('value2').innerHTML = Math.round(recValue);
 
   if (config2.data.labels.length == 10) {
     config2.data.labels.shift();

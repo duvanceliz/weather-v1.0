@@ -26,16 +26,40 @@ const config = {
 
     },
     scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Tiempo(h/m/s)',
+          font: {
+            family: 'Comic Sans MS',
+            size: 13,
+            weight: 'bold',
+            lineHeight: 1,
+          },
+        }
+
+      },
       y: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Nivel(%)',
+          font: {
+            family: 'Comic Sans MS',
+            size: 13,
+            weight: 'bold',
+            lineHeight: 1,
+          },
+
+        },
         min: 0,
         max: 100,
       },
 
-
     }
 
-  },
-
+  }
 
 };
 var ctx = document.getElementById('myChart').getContext('2d');
@@ -44,7 +68,7 @@ socket.on('mqtt_message1', function (valor) {
 
   recValue = valor['nivel']
   recDate = valor['fecha']
-  document.getElementById('value1').innerHTML = recValue;
+  document.getElementById('value1').innerHTML = Math.round(recValue);
   console.log(valor)
 
   if (config.data.labels.length == 10) {
