@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-4">
+            {% if current_user.is_authenticated %}
+            <h3 style="margin: .5em;">Hola {{ user.nombre}}!</h3>
+            {% endif %}
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active">Opciones</a>
+                <a href="{{url_for('acomulados')}}" class="list-group-item list-group-item-action">Acomulados</a>
+                <!-- <a href="#" class="list-group-item list-group-item-action">Datos instantaneos</a> -->
+                <a href="{{url_for('downloadData')}}" class="list-group-item list-group-item-action">Descargar datos</a>
+            </div>
+        </div>
+
+        <div class="col-4">
+
+        </div>
+        <div class="col-4">
+
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

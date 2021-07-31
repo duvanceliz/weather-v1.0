@@ -1,0 +1,36 @@
+
+h2{
+    text-align: center;
+    margin: .5em;
+
+}
+
+#footer{
+
+    background-color: green;
+}
+
+.container-p{
+
+    min-height: 100vh;
+}
+#card1{
+    text-align: center;
+    z-index: 1;
+
+}
+
+p{
+    display: inline;
+    font-size: 13px;
+}
+
+.aForget,.aRegister{
+
+    font-size: 13px;
+}
+
+.logoheader{
+    display: inline;
+}
+
