@@ -210,16 +210,321 @@
 </div>
 
 
+<!-- Jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+<script>
+ Chart.defaults.global.responsive = true;
+  Chart.defaults.global.legend.display = false;
+
+  $(document).ready(function () {
+    const config = {
+      type: 'line',
+      data: {
+        labels: [0,0,0,0,0],
+        datasets: [{
+          label: "Numero 1",
+          backgroundColor: "rgb(132,186,91,0.2)",
+          borderColor: "rgb(57, 106, 177)",
+          data: [0,0,0,0,0],
+          fill: false,
+        }],
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Fecha'
+            }
+          }],
+          yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Nivel(%)'
+            },
+           min: 0,
+           max: 100,
+          }]
+        }
+      }
+    };
+
+    const context = document.getElementById('myChart').getContext('2d');
+
+    const lineChart = new Chart(context, config);
+
+    const source = new EventSource("/datos_monitoreo");
+ 
+    source.onmessage = function (event) {
+    
+
+      const data = JSON.parse(event.data);
+      document.getElementById('value1').innerHTML = Math.round(data.dato);
+      if (config.data.labels.length == 5) {
+          config.data.labels.shift();
+          config.data.datasets[0].data.shift();
+      }
+
+      config.data.labels.push(data.fecha);
+      config.data.datasets[0].data.push(data.dato);
+      lineChart.update();
+    }
+  });
+  
+</script>
 
 
-<!-- libreria para socketio -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-  integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-  crossorigin="anonymous"></script>
 
-<script src="{{ url_for('static', filename='chartsOnline/chart1.js')}}"></script>
-<script src="{{ url_for('static', filename='chartsOnline/chart2.js')}}"></script>
-<script src="{{ url_for('static', filename='chartsOnline/chart3.js')}}"></script>
-<script src="{{ url_for('static', filename='chartsOnline/chart4.js')}}"></script>
+
+<!-- chart 2  -->
+
+<script>
+Chart.defaults.global.responsive = true;
+  Chart.defaults.global.legend.display = false;
+
+  $(document).ready(function () {
+    const config2 = {
+      type: 'line',
+      data: {
+        labels: [0,0,0,0,0],
+        datasets: [{
+          label: "Numero 2",
+          backgroundColor: "rgb(132,186,91,0.2)",
+          borderColor: "rgb(218, 124, 48)",
+          data: [0,0,0,0,0],
+          fill: false,
+        }],
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Fecha'
+            }
+          }],
+          yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Temperatura(°C)'
+            },
+           min: 0,
+           max: 100,
+          }]
+        }
+      }
+    };
+
+    const context = document.getElementById('myChart2').getContext('2d');
+
+    const lineChart = new Chart(context, config2);
+
+    const source = new EventSource("/datos_monitoreo");
+ 
+    source.onmessage = function (event) {
+    
+      const data = JSON.parse(event.data);
+
+      document.getElementById('value2').innerHTML = Math.round(data.dato);
+      if (config2.data.labels.length == 5) {
+          config2.data.labels.shift();
+          config2.data.datasets[0].data.shift();
+      }
+
+      config2.data.labels.push(data.fecha);
+      config2.data.datasets[0].data.push(data.dato2);
+      lineChart.update();
+    }
+  });
+
+
+
+</script>
+
+
+
+
+<!-- chart 3  -->
+
+<script>
+  Chart.defaults.global.responsive = true;
+    Chart.defaults.global.legend.display = false;
+  
+    $(document).ready(function () {
+      const config3 = {
+        type: 'line',
+        data: {
+          labels: [0,0,0,0,0],
+          datasets: [{
+            label: "Numero 3",
+            backgroundColor: "rgb(132,186,91,0.2)",
+            borderColor: "rgb(62, 150, 81)",
+            data: [0,0,0,0,0],
+            fill: false,
+          }],
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+          },
+          hover: {
+            mode: 'nearest',
+            intersect: true
+          },
+          scales: {
+            xAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Fecha'
+              }
+            }],
+            yAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Humedad(%)'
+              },
+             min: 0,
+             max: 100,
+            }]
+          }
+        }
+      };
+  
+      const context = document.getElementById('myChart3').getContext('2d');
+  
+      const lineChart = new Chart(context, config3);
+  
+      const source = new EventSource("/datos_monitoreo");
+   
+      source.onmessage = function (event) {
+      
+        const data = JSON.parse(event.data);
+  
+        document.getElementById('value3').innerHTML = Math.round(data.dato);
+        if (config3.data.labels.length == 5) {
+            config3.data.labels.shift();
+            config3.data.datasets[0].data.shift();
+        }
+  
+        config3.data.labels.push(data.fecha);
+        config3.data.datasets[0].data.push(data.dato3);
+        lineChart.update();
+      }
+    });
+  </script>
+
+
+<!-- chart 4  -->
+
+<script>
+  Chart.defaults.global.responsive = true;
+    Chart.defaults.global.legend.display = false;
+  
+    $(document).ready(function () {
+      const config4 = {
+        type: 'line',
+        data: {
+          labels: [0,0,0,0,0],
+          datasets: [{
+            label: "Numero 3",
+            backgroundColor: "rgb(132,186,91,0.2)",
+            borderColor: "rgb(204, 37, 41)",
+            data: [0,0,0,0,0],
+            fill: false,
+          }],
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+          },
+          hover: {
+            mode: 'nearest',
+            intersect: true
+          },
+          scales: {
+            xAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Fecha'
+              }
+            }],
+            yAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Presion Atm(kPa)'
+              },
+             min: 0,
+             max: 100,
+            }]
+          }
+        }
+      };
+  
+      const context = document.getElementById('myChart4').getContext('2d');
+  
+      const lineChart = new Chart(context, config4);
+  
+      const source = new EventSource("/datos_monitoreo");
+   
+      source.onmessage = function (event) {
+      
+        const data = JSON.parse(event.data);
+  
+        document.getElementById('value4').innerHTML = Math.round(data.dato);
+        if (config4.data.labels.length == 5) {
+            config4.data.labels.shift();
+            config4.data.datasets[0].data.shift();
+        }
+  
+        config4.data.labels.push(data.fecha);
+        config4.data.datasets[0].data.push(data.dato4);
+        lineChart.update();
+      }
+    });
+  </script>
+
 {%endblock%}

@@ -1,5 +1,3 @@
-
-import eventlet
 from flask import Flask, render_template, request, session, escape, redirect, url_for, flash, g, send_from_directory,jsonify,send_file,Response,stream_with_context
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import debug
@@ -7,15 +5,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager,login_user,logout_user,login_required,current_user,UserMixin
 from datetime import datetime
 from flask_mqtt import Mqtt 
-from flask_socketio import SocketIO
 import json
 import pandas as pd
 from flask_mail import Mail
 from flask_mail import Message
 from itsdangerous import TimedJSONWebSignatureSerializer, SignatureExpired
-
-
-eventlet.monkey_patch()
 
 app = Flask(__name__)
 
@@ -33,8 +27,7 @@ app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_USERNAME'] = ''
 app.config['MQTT_PASSWORD'] = ''
 app.config['MQTT_REFRESH_TIME'] = 0.001  # refresh time in seconds
-app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///prueba.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///prueba.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
@@ -54,8 +47,6 @@ app.config['SECRET_KEY'] = 'bx99xa4xa6x1axc9x10irxfexdeex12x0esx98'
 
 
 mqtt = Mqtt(app)
-socketio = SocketIO(app)
-
 
 mail = Mail(app)
 db = SQLAlchemy(app)
@@ -102,10 +93,6 @@ class sensor4(db.Model):
 
 
 @login_manager.user_loader
-
-
-
-
 def load_user(user_id):
     return usuarios.query.get(int(user_id))
 
@@ -365,7 +352,24 @@ def newpassword():
     rformat = 'recoverpassword/{token}'.format(token= valueToken)  
     print(rformat)
     return redirect(rformat)
-    
+
+
+def _dato():
+    dato = sensor1.query.order_by(sensor1.fecha.desc()).first()
+    dato2 = sensor2.query.order_by(sensor2.fecha.desc()).first()
+    dato3 = sensor3.query.order_by(sensor3.fecha.desc()).first()
+    dato4 = sensor4.query.order_by(sensor4.fecha.desc()).first()
+    dict1 = {'dato':dato.dato,'dato2':dato2.dato, 'dato3':dato3.dato,'dato4':dato4.dato,'fecha':dato.fecha.strftime('%H:%M:%S')}
+    json_data = json.dumps(dict1)
+    yield f"data:{json_data}\n\n"
+
+
+@app.route('/datos_monitoreo')
+def datos_monitoreo():
+    enviar = _dato()
+    return Response(stream_with_context(enviar), mimetype='text/event-stream')
+
+  
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
     mqtt.subscribe('duvan/sensores')
@@ -381,28 +385,26 @@ def handle_mqtt_message(client, userdata, message):
         Datos_recibido = sensor1(dato = data1['nivel'])
         db.session.add(Datos_recibido)
         db.session.commit()
-        print(data1)
-        socketio.emit('mqtt_message1', data1)
+
     elif(message.topic == 'manuel/sensores'):
         my_json2 = message.payload.decode('utf8')
         data2 = json.loads(my_json2)
-        Datos_recibido2 = sensor2(dato = data2['presion'])
+        Datos_recibido2 = sensor2(dato = data2['nivel'])
         db.session.add(Datos_recibido2)
         db.session.commit()
-        print(data2)
-        socketio.emit('mqtt_message4', data2)
+       
+       
     elif(message.topic == 'eudes/sensores'):
         my_json3 = message.payload.decode('utf8')
         data3 = json.loads(my_json3)
-        Datos_recibido = sensor3(dato = data3['temp'])
+        Datos_recibido = sensor3(dato = data3['nivel'])
         db.session.add(Datos_recibido)
         db.session.commit()
-        Datos_recibido2 = sensor4(dato = data3['humedad'])
+        Datos_recibido2 = sensor4(dato = data3['nivel'])
         db.session.add(Datos_recibido2)
         db.session.commit()
-        print(data3)
-        socketio.emit('mqtt_message2', data3)
-        socketio.emit('mqtt_message3', data3)
+       
+      
             
 # @mqtt.on_log()
 # def handle_logging(client, userdata, level, buf):
@@ -410,8 +412,7 @@ def handle_mqtt_message(client, userdata, message):
 
 if __name__=='__main__':
     db.create_all()
-    # app.run(debug=True)
-    socketio.run(app, host='127.0.0.1', port=5000, use_reloader=False, debug = True)   
+    app.run()
     mail.init_app(app)
-    # mqtt.init_app(app)
+    mqtt.init_app(app)
 
