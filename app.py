@@ -17,9 +17,9 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'duvanceliz@gmail.com'
-app.config['MAIL_PASSWORD'] = 'ingmusica2020'
-app.config['MAIL_DEFAULT_SENDER'] = 'duvanceliz@gmail.com'
+app.config['MAIL_USERNAME'] = 'ejemplo@gmail.com'
+app.config['MAIL_PASSWORD'] = 'password'
+app.config['MAIL_DEFAULT_SENDER'] = 'ejemplo@gmail.com'
 app.config['MAIL_MAX_EMAILS'] = None
 
 app.config['MQTT_BROKER_URL'] = 'test.mosquitto.org'
@@ -43,7 +43,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # UPLOAD_FOLDER = os.path.abspath('./static/')
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SECRET_KEY'] = 'bx99xa4xa6x1axc9x10irxfexdeex12x0esx98'
+app.config['SECRET_KEY'] = 'clave secreta'
 
 
 mqtt = Mqtt(app)
